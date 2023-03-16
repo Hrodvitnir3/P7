@@ -1,0 +1,141 @@
+---
+title: "P7"
+authir: Jose Antnio Vallet Lopez
+date: "2023-03-16"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+#Ejercicio 1
+
+Para este ejercicio, primero creamos una semilla, asegurando asi que los numeros sean aleatorios. Tras esto, creamos tres variables (z,x,y) con distintas distribuciones.
+
+Una vez creadas, operamos entre ellas (y1,y2). Usamos la funcion hist para asegurarnos que la distribucion es correcta. Por ultimo, aplicamos el contraste de hipotesis con la funcion t.test
+```{r echo=TRUE}
+set.seed(1)
+
+z <- rnorm(100)
+x <- rpois(100, 10.3)
+y <- rbinom(100,1,.25)
+
+y1 <- 5*z+x*10+rnorm(100,2,1)
+y2 <- 5*z+x*12+rnorm(100,2,1)
+
+hist(y1)
+hist(y2)
+
+t.test(y1)
+t.test(y1,y2)
+```
+
+
+#Ejercicio2
+
+La correlación lineal es una correlación paramétrica ya que la correlación lineal establece una relación lineal entre dos variables, es decir, es una distribución normal. 
+
+Las pruebas paramétricas analizan elementos de una distribución normal, mientras que las no paramétricas analizan datos de una distribución no normal.
+
+#Ejercicio3
+```{r}
+correlation(data)
+```
+
+
+Las variables mas asociadas son longitud y peso.
+
+#Ejercicio4
+```{r}
+cor_matrix<-cor(data)
+corrplot(cor_matrix,method = "circle",type = "lower",order = "hclust",addCoef.col = "black",tl.col = "black",tl.srt = 45,tl.offset = 1)
+```
+Lo que observamos en este grafica, es que, a mayor intensidad de azul, mayor es la asociacion entre variables, dandonos el mismo resultado que en el ejercicio anterior. 
+
+
+#Ejercicio5
+```{r}
+correlation(data)
+
+```
+
+
+#Ejercicio6
+```{r}
+plot(data$longitud,data$peso)
+abline(lm(data$peso~data$longitud),col="red")
+text(paste("Correlacion:",round(cor(data$longitud,data$peso),2)),x=25,y=95)
+
+```
+
+
+#Ejercicio7
+```{r}
+corrplot(cor_matrix,method = "circle",type = "lower",order = "hclust",addCoef.col = "black",tl.col = "black",tl.srt = 45,tl.offset = 1)
+
+```
+
+
+#Ejecicio 8
+A.
+```{r}
+distancia<-c("1.1","100.2","90.3","5.4","57.5","6.6","34.7","65.8","57.9","86.1")
+n_piezas<-c("110","2","6","98","40","94","31","5","8","10") 
+
+```
+B.
+```{r}
+distancia<-as.numeric(distancia)
+n_piezas<-as.numeric(n_piezas)
+cor(distancia,n_piezas)
+```
+C.
+```{r}
+shapiro.test(distancia,n_piezas)
+```
+D.
+```{r}
+t.test(distancia,n_piezas,conf.level = 0.95)
+
+```
+E. La intensidad es la relacion directa que hay entre dos variables, la fuerza entre ambas. En este caso es positiva, pues a mas distancia, mayor es el numero de piezas. La direccion es la forma en la que se relacionan (proporcional o inversamente proporcional), siendo en este caso proporcionales por lo dicho anteriormente. 
+
+F. Esta relacion es muy significativa pues nos ayuda a entender como se relacionan las variables y como analizar dicha relacion.
+
+G. No resultaria apropiado pues el numero de casos seria demasiado bajo
+
+#Ejercicio 9
+
+La linea azul representa la relacion lineal, mientras que la roja la monotona
+
+```{r}
+x1 <- seq(1, 10, length.out = 20)
+y1 <- 2 * x1 + 3
+
+x2 <- seq(1, 10, length.out = 20)
+y2 <- x2^2
+
+
+plot(x1, y1, pch = 16, col = "blue", main = "Ejemplo de relaciones lineal y monótona")
+points(x2, y2, pch = 16, col = "red")
+
+
+abline(lm(y1 ~ x1), col = "blue", lwd = 2)
+lines(x2, predict(loess(y2 ~ x2)), col ="red",lwd=2)
+
+[Monotone](https://rpubs.com/osoramirez/316691)
+
+```
+
+#Ejercicio 10
+
+Para las relaciones monotona se emplea la prueba de correlacion Spearman, ya que nos ayuda a detectar este tipo de correlacion. 
+```{r}
+cor(y1, y2, use="everything",
+    method=c("spearman"))
+```
+
